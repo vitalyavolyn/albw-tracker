@@ -1,0 +1,12 @@
+{
+  "name": "albw-tracker",
+  "version": "0.1.0",
+  "description": "100% checklist and save analyzer for The Legend of Zelda: A Link Between Worlds",
+  "type": "module",
+  "license": "GPL-2.0-only",
+  "scripts": {
+    "start": "node tools/serve.mjs",
+    "gen": "node tools/gen-checks.mjs",
+    "check-save": "node tools/check-save.mjs"
+  }
+}

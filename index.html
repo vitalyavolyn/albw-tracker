@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>A Link Between Worlds 100% Checklist</title>
+  <meta name="description" content="100% checklist for The Legend of Zelda: A Link Between Worlds with a save file analyzer.">
+  <link rel="stylesheet" href="src/style.css">
+  <script type="module" src="src/main.js"></script>
+</head>
+<body>
+  <main class="container">
+    <h1>A Link Between Worlds 100% Checklist</h1>
+
+    <details open>
+      <summary><h2>Save file</h2></summary>
+      <div class="section-body">
+        <p>Load your save to mark everything you've already collected. Export it from your 3DS with
+          <a href="https://github.com/BernardoGiordano/Checkpoint" target="_blank" rel="noopener">Checkpoint</a>, then
+          pick the backup folder (or the whole game folder to choose between backups).</p>
+        <div class="row">
+          <label class="button" for="pick-folder">Load save folder</label>
+          <input id="pick-folder" type="file" webkitdirectory directory multiple hidden>
+          <label class="button" for="pick-files">Load files</label>
+          <input id="pick-files" type="file" accept=".bin" multiple hidden>
+          <span class="muted">or drop a folder anywhere on the page</span>
+        </div>
+        <p class="error" id="error" hidden></p>
+        <div id="save-info"></div>
+      </div>
+    </details>
+
+    <details open>
+      <summary><h2 id="completion-title">Completion</h2></summary>
+      <div class="section-body">
+        <table class="completion" id="completion"></table>
+        <label class="row"><input type="checkbox" id="count-fissures"> Count fissures toward completion</label>
+      </div>
+    </details>
+
+    <details open>
+      <summary><h2>View settings</h2></summary>
+      <div class="section-body settings">
+        <label><input type="checkbox" id="hide-done"> Hide obtained</label>
+        <div>Regroup elements:
+          <label><input type="radio" name="group" value="category" checked> By category</label>
+          <label><input type="radio" name="group" value="location"> By location</label>
+        </div>
+        <div>Show:
+          <label><input type="radio" name="world" value="all" checked> All</label>
+          <label><input type="radio" name="world" value="Hyrule"> Hyrule</label>
+          <label><input type="radio" name="world" value="Lorule"> Lorule</label>
+          <label><input type="radio" name="world" value="Dungeon"> Dungeons</label>
+        </div>
+        <div class="row">
+          <input type="search" id="search" placeholder="Search..." aria-label="Search">
+          <button type="button" id="expand-all">Expand All</button>
+          <button type="button" id="collapse-all">Collapse All</button>
+        </div>
+      </div>
+    </details>
+
+    <details>
+      <summary><h2>Export / Import</h2></summary>
+      <div class="section-body">
+        <p>Checks and settings are kept in this browser. To move them to another browser or device, export them here,
+          copy the text, paste it into the box there and import. Importing replaces what that browser had.</p>
+        <textarea id="state-text" rows="4" spellcheck="false" aria-label="Progress text"></textarea>
+        <div class="row">
+          <button type="button" id="export-state">Export</button>
+          <button type="button" id="import-state">Import</button>
+          <button type="button" id="reset-state">Reset</button>
+          <span class="muted" id="state-status"></span>
+        </div>
+      </div>
+    </details>
+
+    <div id="lists"></div>
+
+    <footer>
+      <p>The save flags come from <a href="https://github.com/randomsalience/albw-archipelago" target="_blank" rel="noopener">albw-archipelago</a>
+        and the vanilla items and regions from <a href="https://github.com/rickfay/z17-randomizer" target="_blank" rel="noopener">z17-randomizer</a>.
+        Save files are never uploaded.</p>
+    </footer>
+  </main>
+  <div id="drop-overlay" hidden>Drop your save folder</div>
+</body>
+</html>

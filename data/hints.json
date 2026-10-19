@@ -1,0 +1,40 @@
+{
+  "sources": [
+    "Zelda's Palace, Pieces of Heart: https://www.zeldaspalace.com/alinkbetweenworlds/piecesOfHeart.php",
+    "GameSkinny, Piece of Heart Locations Guide: https://www.gameskinny.com/tips/a-link-between-worlds-piece-of-heart-locations-guide/",
+    "Prima Games, How to Get the Pegasus Boots: https://primagames.com/tips/legend-zelda-link-between-worlds-how-get-pegasus-boots",
+    "GamingBolt, A Link Between Worlds Mega Guide: https://gamingbolt.com/the-legend-of-zelda-a-link-between-worlds-mega-guide-collectibles-locations-rupees-more",
+    "Areas cross-checked against rickfay/z17-randomizer (randomizer/src/regions)."
+  ],
+  "note": "Short directions shown under a check, keyed by check name. Written in our own words from the sources above.",
+  "hints": {
+    "Kakariko Well (Top)": "Drop into the well from above, northwest Kakariko (Power Glove, or glide in with a Cucco).",
+    "Dodge the Cuccos": "Cucco Ranch: clear the hardest (rooster) round.",
+    "Blacksmith Ledge": "Behind the Blacksmith's forge: merge into the right wall and walk north.",
+    "[HS] Ledge": "Under the Sanctuary: take the west stairs, cross the walkway east, then merge into the wall to the east.",
+    "Lost Woods Alcove": "North-central Lost Woods: through the hollow log and a narrow merge path.",
+    "Hyrule Castle Rocks": "Hyrule Castle courtyard, northeast corner: lift the rocks.",
+    "Waterfall Cave": "Cave behind the waterfall northeast of Irene's house (Flippers).",
+    "Rupee Rush (Hyrule)": "Rupee Rush, west of the Cucco Ranch: collect 100+ rupees (Pegasus Boots).",
+    "Hyrule Hotfoot 65s": "Hyrule Hotfoot: beat the second time target (65 s).",
+    "Eastern Ruins Cave": "Cave just south of the Eastern Palace: bomb it open, then merge into the wall and go west.",
+    "Eastern Ruins Peg Circle": "Southeast Eastern Ruins: hammer the right one of the 10 pegs.",
+    "Southern Ruins Pillar Cave": "Southern Ruins: between the two big statues, then west (bombs).",
+    "Spectacle Rock": "Death Mountain, west of Tower of Hera: lower cave entrance.",
+    "Floating Island": "Top of Hyrule's Death Mountain, next to the fissure. You get there from Lorule's Death Mountain (Fire Rod, Tornado Rod).",
+    "Stylish Woman": "Kakariko: the locked house, opened from Thieves' Town's fissure. Talk to the woman.",
+    "Graveyard Ledge Cave": "Take the Sanctuary fissure to Lorule, head south then east, climb the ladder and bomb the rocks to uncover a fissure back to Hyrule's graveyard ledge.",
+    "Fortune's Choice": "Thieves' Town: win Fortune's Choice (pick the right chest).",
+    "Octoball Derby": "Lorule: Octoball Derby, score 100 or more points.",
+    "Rupee Rush (Lorule)": "Rupee Rush southwest of Thieves' Town: collect 150+ rupees (Pegasus Boots).",
+    "Swamp Cave (Middle)": "Lorule swamp: cave behind the cracked rock (Big Bomb Flower).",
+    "Dark Maze Ledge": "Dark Maze on the way to the Dark Palace.",
+    "Destroyed House": "Lorule woods: merge through the painting in front of Sahasrahla's old house (left side).",
+    "n-Shaped House": "Flat roof southwest of the ruined house: throw yourself up with a Cucco.",
+    "Misery Mire Ledge": "Misery Mire: via the weather vane fissure and Hyrule steps (Sand Rod, bombs).",
+    "Blacksmith Cave": "Cave past the big rock just south of the Blacksmith (Titan's Mitt).",
+    "[TR] Left Balcony": "Outside Turtle Rock, on its left balcony (Ice Rod).",
+    "Fire Cave Pillar": "Hyrule's Death Mountain, the volcanic cave past Rosso's Ore Mine: ride the moving smiley-face blocks up (Hammer).",
+    "Shady Guy": "Kakariko Village, after you've been to Zora's Domain: merge into the wall and come out behind the Shady Guy."
+  }
+}

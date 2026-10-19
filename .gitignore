@@ -1,0 +1,5 @@
+node_modules/
+tools/.cache/
+.local-saves/
+.DS_Store
+.claude/
