@@ -17,7 +17,6 @@ const CATEGORIES = [
 const CATEGORY_BY_KEY = Object.fromEntries(CATEGORIES.map((cat) => [cat.key, cat]));
 const WORLD_ORDER = { Hyrule: 0, Lorule: 1, Dungeon: 2 };
 const VIEW_DEFAULTS = { hideDone: false, group: 'category', world: 'all', countFissures: false };
-const EXPORT_PREFIX = 'ALBW2:';
 
 // localStorage throws in some private browsing modes; the page works without it.
 const storage = {
@@ -421,48 +420,28 @@ async function load(entries) {
   selectFile();
 }
 
-function toBase64(bytes) {
-  let binary = '';
-  for (const byte of bytes) binary += String.fromCharCode(byte);
-  return btoa(binary);
-}
-
-function fromBase64(text) {
-  return Uint8Array.from(atob(text), (ch) => ch.charCodeAt(0));
-}
-
-async function gzip(text) {
-  const stream = new Blob([text]).stream().pipeThrough(new CompressionStream('gzip'));
-  return new Uint8Array(await new Response(stream).arrayBuffer());
-}
-
-function gunzip(bytes) {
-  const stream = new Blob([bytes]).stream().pipeThrough(new DecompressionStream('gzip'));
-  return new Response(stream).text();
-}
-
-async function exportState() {
-  const json = JSON.stringify({ ticks: [...ticks], view: pickView(view) });
+function exportState() {
   const box = $('#state-text');
-  box.value = EXPORT_PREFIX + toBase64(await gzip(json));
+  box.value = JSON.stringify({ app: 'albw-tracker', ticks: [...ticks], view: pickView(view) });
   box.select();
   $('#state-status').textContent = `${plural(ticks.size, 'tick')} and your settings. Copy the text to keep it.`;
 }
 
-async function importState() {
+function importState() {
   const status = $('#state-status');
-  const text = $('#state-text').value.trim();
   let state;
   try {
-    if (!text.startsWith(EXPORT_PREFIX)) throw new Error('missing prefix');
-    state = JSON.parse(await gunzip(fromBase64(text.slice(EXPORT_PREFIX.length))));
+    state = JSON.parse($('#state-text').value);
   } catch {
+    state = null;
+  }
+  if (state?.app !== 'albw-tracker' || !Array.isArray(state.ticks)) {
     status.textContent = "That text isn't an export from this tracker.";
     return;
   }
   const known = new Set(CHECKS.map((check) => check.id));
   ticks.clear();
-  for (const id of state.ticks ?? []) {
+  for (const id of state.ticks) {
     if (known.has(id)) ticks.add(id);
   }
   saveTicks();
