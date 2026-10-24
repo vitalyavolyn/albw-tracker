@@ -1,21 +1,8 @@
 import CHECKS from './checks.js';
 import { detect, isCleared, summarize } from './save.js';
 import { entriesFromInput, entriesFromDrop, groupBackups, isSaveFile } from './loader.js';
+import { CATEGORIES, esc, groupChecks, groupHtml, groupTitle } from './render.js';
 
-const CATEGORIES = [
-  { key: 'story', name: 'Story', plural: 'Story' },
-  { key: 'equipment', name: 'Equipment', plural: 'Equipment' },
-  { key: 'heartPiece', name: 'Piece of Heart', plural: 'Pieces of Heart' },
-  { key: 'heartContainer', name: 'Heart Container', plural: 'Heart Containers' },
-  { key: 'maiamai', name: 'Lost Maiamai', plural: 'Lost Maiamai' },
-  { key: 'overworld', name: 'Overworld Treasure', plural: 'Overworld Treasure' },
-  { key: 'dungeon', name: 'Dungeon Treasure', plural: 'Dungeon Treasure' },
-  { key: 'minigame', name: 'Minigame', plural: 'Minigames' },
-  { key: 'weatherVane', name: 'Weather Vane', plural: 'Weather Vanes' },
-  { key: 'fissure', name: 'Fissure', plural: 'Fissures', optional: true },
-];
-const CATEGORY_BY_KEY = Object.fromEntries(CATEGORIES.map((cat) => [cat.key, cat]));
-const WORLD_ORDER = { Hyrule: 0, Lorule: 1, Dungeon: 2 };
 const VIEW_DEFAULTS = { hideDone: false, group: 'category', world: 'all', countFissures: false };
 
 // localStorage throws in some private browsing modes; the page works without it.
@@ -56,6 +43,7 @@ const openGroups = new Set(storage.get('albw.open', []));
 const ticks = new Set(storage.get('albw.ticks', []));
 
 let report = storage.get('albw.report', null);
+if (!report?.stats) report = null;
 
 let backups = [];
 let backupIndex = 0;
@@ -66,8 +54,6 @@ const isDone = (check) => ticks.has(check.id);
 const percent = (done, total) => (total ? Math.floor((done / total) * 100) : 0);
 const plural = (n, word) => `${n} ${word}${n === 1 ? '' : 's'}`;
 
-const HTML_ESCAPES = { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' };
-const esc = (text) => String(text ?? '').replace(/[&<>"']/g, (ch) => HTML_ESCAPES[ch]);
 
 function currentBackup() {
   return backups[backupIndex] ?? null;
@@ -91,7 +77,6 @@ function setView(changes) {
   syncControls();
 }
 
-// Checks the save can't track keep their tick.
 function applySave(slot, common) {
   for (const check of CHECKS) {
     if (!check.rule) continue;
@@ -302,28 +287,6 @@ function renderCompletion() {
   }
 }
 
-function groups() {
-  if (view.group === 'category') {
-    return CATEGORIES.map((cat) => ({
-      id: `cat-${cat.key}`,
-      title: cat.plural,
-      checks: CHECKS.filter((check) => check.cat === cat.key),
-    }));
-  }
-  const byRegion = new Map();
-  for (const check of CHECKS) {
-    if (!byRegion.has(check.region)) byRegion.set(check.region, { world: check.world, checks: [] });
-    byRegion.get(check.region).checks.push(check);
-  }
-  return [...byRegion.entries()]
-    .sort(([nameA, a], [nameB, b]) => WORLD_ORDER[a.world] - WORLD_ORDER[b.world] || nameA.localeCompare(nameB))
-    .map(([region, group]) => ({
-      id: `loc-${region.replace(/\W+/g, '-')}`,
-      title: `${region} (${group.world})`,
-      checks: group.checks,
-    }));
-}
-
 function isVisible(check) {
   if (view.world !== 'all' && check.world !== view.world) return false;
   if (view.hideDone && isDone(check)) return false;
@@ -334,34 +297,13 @@ function isVisible(check) {
   return true;
 }
 
-function renderRow(check) {
-  const done = isDone(check);
-  const where = view.group === 'category' ? check.region : CATEGORY_BY_KEY[check.cat].name;
-  const note = check.note ? `<div class="note">${esc(check.note)}</div>` : '';
-  return `<tr class="${done ? 'done' : ''}">
-    <td class="check"><input type="checkbox" ${done ? 'checked' : ''} data-id="${esc(check.id)}" aria-label="Mark ${esc(check.name)} as done"></td>
-    <td><span class="name">${esc(check.name)}</span>${note}</td>
-    <td class="where">${esc(where)}</td>
-    <td>${esc(check.item)}</td></tr>`;
-}
-
-function groupTitle(group) {
-  return `${group.title} (${group.checks.filter(isDone).length} / ${group.checks.length})`;
-}
-
 function renderLists() {
-  const whereHeader = view.group === 'category' ? 'Location' : 'Type';
   const html = [];
-  for (const group of groups()) {
+  for (const group of groupChecks(view.group)) {
     const shown = group.checks.filter(isVisible);
     if (!shown.length) continue;
-    const isOpen = openGroups.has(group.id) || view.search;
-    html.push(`<details id="${group.id}" ${isOpen ? 'open' : ''}>
-      <summary><h2>${esc(groupTitle(group))}</h2></summary>
-      <div class="list-wrap"><table class="list">
-        <thead><tr><th></th><th>Name</th><th class="where">${whereHeader}</th><th>Reward</th></tr></thead>
-        <tbody>${shown.map(renderRow).join('')}</tbody>
-      </table></div></details>`);
+    const open = openGroups.has(group.id) || Boolean(view.search);
+    html.push(groupHtml(group, { grouping: view.group, shown, isDone, open }));
   }
   $('#lists').innerHTML = html.join('') || '<p class="muted">Nothing to show with these settings.</p>';
 
@@ -379,8 +321,8 @@ function renderLists() {
       saveTicks();
       box.closest('tr').classList.toggle('done', box.checked);
       const details = box.closest('details');
-      const group = groups().find((g) => g.id === details.id);
-      details.querySelector('summary h2').textContent = groupTitle(group);
+      const group = groupChecks(view.group).find((g) => g.id === details.id);
+      details.querySelector('summary h2').textContent = groupTitle(group, group.checks.filter(isDone).length);
       renderCompletion();
     });
   }
@@ -505,7 +447,7 @@ $('#search').addEventListener('input', (e) => {
 });
 
 $('#expand-all').addEventListener('click', () => {
-  for (const group of groups()) openGroups.add(group.id);
+  for (const group of groupChecks(view.group)) openGroups.add(group.id);
   saveOpenGroups();
   renderLists();
 });

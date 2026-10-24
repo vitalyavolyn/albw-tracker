@@ -6,7 +6,8 @@
   "license": "GPL-2.0-only",
   "scripts": {
     "start": "node tools/serve.mjs",
-    "gen": "node tools/gen-checks.mjs",
-    "check-save": "node tools/check-save.mjs"
+    "gen": "node tools/gen-checks.mjs && node tools/prerender.mjs",
+    "check-save": "node tools/check-save.mjs",
+    "prerender": "node tools/prerender.mjs"
   }
 }

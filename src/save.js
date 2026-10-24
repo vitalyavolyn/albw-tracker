@@ -1,5 +1,3 @@
-// See docs/save-format.md for the layout.
-
 const SLOT_SIZE = 0x1604;
 const COMMON_SIZE = 0x200;
 
@@ -107,7 +105,6 @@ export function parseCommon(name, bytes) {
   return { clearedMask: bytes[0x08] };
 }
 
-// Returns null without SaveCommon.bin, since the slot itself doesn't record it.
 export function isCleared(slot, common) {
   if (!common) return null;
   return ((common.clearedMask >> (slot.slot - 1)) & 1) === 1;

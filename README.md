@@ -26,6 +26,9 @@ npm run check-save -- <folder>
 `tools/.cache/`. Flags that only exist in randomized games are replaced in `tools/gen-checks.mjs` with the vanilla flag
 or an inventory check.
 
+`npm run gen` also runs `npm run prerender`, which writes the checklist into `index.html` so the page has its content
+without JavaScript. Run `npm run prerender` on its own after changing `src/render.js`.
+
 Hints in `data/hints.json` are based on
 [Zelda's Palace](https://www.zeldaspalace.com/alinkbetweenworlds/piecesOfHeart.php),
 [GameSkinny](https://www.gameskinny.com/tips/a-link-between-worlds-piece-of-heart-locations-guide/),
